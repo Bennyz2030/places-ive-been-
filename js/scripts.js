@@ -41,22 +41,27 @@ Destination.prototype.displayInfo = function() {
 }
 
 // UI Logic
+
 let destinationLog = new DestinationLog();
+
+function displayDestinationDetails(destinationLogToDisplay) {
+  let destinationList = $("ul#destinations");
+  let htmlForDestinationInfo = "";
+  Object.keys(destinationLogToDisplay.destinations).forEach(function(key) {
+    const destination = destinationLogToDisplay.findDestination(key);
+    htmlForDestinationInfo += "<li id=" + destination.id + ">" + destination.location + " " + destination.travelDate + " " + destination.landmarks + "</li>";
+  });
+  destinationList.html(htmlForDestinationInfo);
+}
 
 $(document).ready(function() {
   $("form#new-destination").submit(function(event) {
     event.preventDefault();
-    const locationInput = $("input#new-location").val();
-    const travelDateInput = $("input#new-travel-date").val();
-    const landmarksInput = $("input#new-landmarks").val();
+    const locationInput = $("input#location").val();
+    const travelDateInput = $("input#travel-date").val();
+    const landmarksInput = $("input#landmarks").val();
     let newDestination = new Destination(locationInput, travelDateInput, landmarksInput);
     destinationLog.addDestination(newDestination);
-    console.log(destinationLog.destinations);
-
-    $(".locations").text(destinationLog.destinations[1].location);
-    $(".travel-date").text(destinationLog.destinations.travelDate);
-    $(".landmarks").text(destinationLog.destinations.landmarks);
-
-    $("#show-destination").show();
+    displayDestinationDetails(destinationLog);
   });
 });
